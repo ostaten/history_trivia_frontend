@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+@import 'flowbite/src/themes/default';
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+@theme {
+  --color-primary: oklch(76.9% 0.188 70.08); /* amber-500 */
+  --color-light: oklch(98.7% 0.022 95.277); /* amber-50 */
+  --color-off-light: oklch(96.2% 0.059 95.617); /* amber-100 */
+  --color-neutral: oklch(37.2% 0.044 257.287); /* slate-700 */
+  --color-off-dark: oklch(20.8% 0.042 265.755); /* slate-900 */
+  --color-dark: oklch(12.9% 0.042 264.695); /* slate-950 */
+}
+
+@layer base {
+  html {
+    @apply bg-light
+    text-primary;
+  }
+  h1 {
+    @apply text-2xl 
+    font-bold
+    m-4 text-center;
+  }
+  @media (prefers-color-scheme: dark) {
+    html {
+      @apply bg-dark
+      text-primary;
+    }
+  }
+}
+
+@layer components {
+  .confirmButton {
+    @apply rounded-2xl 
+    col-1 
+    row-1 
+    z-30 
+    justify-center 
+    self-center 
+    w-fit 
+    px-5 
+    py-1 
+    cursor-pointer
+    bg-off-dark
+    dark:bg-light
+    hover:bg-dark
+    dark:hover:bg-off-light;
+  }
+  .card {
+    @apply grid
+    p-1
+    border-2
+    border-primary
+    cursor-grab
+    rounded-lg
+    shadow-sm
+    bg-off-light
+    dark:bg-off-dark
+    m-2
+    w-full
+    text-center
+    place-items-center;
+    p {
+      @apply line-clamp-3 col-1 z-20 row-1;
+    }
+  }
+  .sidebarItem {
+    @apply mb-6;
+  }
+  .arrowIcon {
+    @apply max-w-8;
+  }
+}
