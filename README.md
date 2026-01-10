@@ -1,69 +1,123 @@
-# React + TypeScript + Vite
+# ChronoKwiz Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based frontend application for ChronoKwiz, a history trivia game where players order historical events and landmarks chronologically. The app features an interactive drag-and-drop interface that allows users to arrange historical events in the correct timeline order, with scoring based on accuracy.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Chronokwiz of the Day**: Daily challenges featuring historical events that must be ordered chronologically
+- **Interactive Drag-and-Drop**: Intuitive interface using `@dnd-kit` for arranging historical landmarks
+- **Scoring System**: Real-time scoring based on the accuracy of chronological placement
+- **Modern UI**: Built with Tailwind CSS and Flowbite React components
+- **Type-Safe Routing**: Uses TanStack Router for type-safe navigation
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Before setting up the project, ensure you have the following installed:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Node.js Version Management
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked
+This project requires **Node.js v20.12.0 or higher** (Vite 7.0.4 requires Node.js 20.12.0+). We recommend using **Volta** for Node.js version management:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-]);
+1. **Install Volta** (recommended):
+   - Visit [https://volta.sh/](https://volta.sh/)
+   - Follow the installation instructions for your operating system
+   - Volta will automatically manage Node.js versions based on the project configuration
+
+2. **Alternative: nvm-windows** (Windows):
+   - Download from [https://github.com/coreybutler/nvm-windows/releases](https://github.com/coreybutler/nvm-windows/releases)
+   - Install and use: `nvm install 20.12.0` then `nvm use 20.12.0`
+
+3. **Alternative: Official Node.js Installer**:
+   - Download Node.js v20.x LTS from [https://nodejs.org/](https://nodejs.org/)
+   - Install and verify with `node --version`
+
+### Backend API
+
+This frontend requires a functioning backend API to operate. Ensure you have:
+- The ChronoKwiz backend server running and accessible
+- CORS configured to allow requests from the frontend origin
+
+## Setup Instructions
+
+1. **Clone the repository** (if you haven't already):
+   ```bash
+   git clone <repository-url>
+   cd history_trivia_frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Create environment file**:
+   Create a `.env` file in the root directory with the following variable:
+   ```env
+   VITE_API_BASE_URL=http://localhost:3000
+   ```
+   Replace `http://localhost:3000` with your actual backend API URL.
+
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**:
+   The app will be available at the URL shown in the terminal (typically `http://localhost:5173`)
+
+## Environment Variables
+
+The following environment variable is required:
+
+- `VITE_API_BASE_URL`: The base URL of your backend API (e.g., `http://localhost:3000`)
+
+Create a `.env` file in the project root with this variable. Note that Vite requires the `VITE_` prefix for environment variables to be exposed to the client-side code.
+
+## Available Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build the project for production
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint to check code quality
+- `npm run format` - Format code using Prettier
+
+## Tech Stack
+
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite 7** - Build tool and dev server
+- **TanStack Router** - Type-safe routing
+- **Tailwind CSS 4** - Styling
+- **Flowbite React** - UI components
+- **@dnd-kit** - Drag and drop functionality
+- **Axios** - HTTP client for API requests
+
+## Project Structure
+
+```
+src/
+├── api/           # API route definitions and types
+├── assets/        # Static assets (SVG icons, etc.)
+├── helpers/       # Reusable components (Card, SidebarMenu, etc.)
+├── models/        # TypeScript types and constants
+├── routes/        # TanStack Router route components
+├── utility/       # Utility functions
+└── main.tsx       # Application entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Troubleshooting
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+### Node.js Version Issues
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-]);
+If you encounter `crypto.hash is not a function` error, ensure you're using Node.js v20.12.0 or higher. Check your version with:
+```bash
+node --version
 ```
+
+### Backend Connection Issues
+
+If the app can't connect to the backend:
+- Verify the backend server is running
+- Check that `VITE_API_BASE_URL` in your `.env` file is correct
+- Ensure CORS is properly configured on the backend
+- Check browser console for specific error messages
