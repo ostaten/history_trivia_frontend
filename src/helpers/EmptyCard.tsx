@@ -6,15 +6,8 @@ type EmptyCardProps = {
 function EmptyCard({ numberLeft, isDragging }: EmptyCardProps) {
   console.log(isDragging);
   return (
-    <div className="card w-full">
-      <p>
-        <br />
-        {!isDragging && <br />}
-        <span className="font-extrabold -mb-0.5 block">
-          + {numberLeft} Remaining
-        </span>
-        {isDragging && <br />}
-      </p>
+    <div className="card card-empty w-full">
+      <span className="font-semibold block">+ {numberLeft} Remaining</span>
     </div>
   );
 }

@@ -34,30 +34,36 @@ This project requires **Node.js v20.12.0 or higher** (Vite 7.0.4 requires Node.j
 ### Backend API
 
 This frontend requires a functioning backend API to operate. Ensure you have:
+
 - The ChronoKwiz backend server running and accessible
 - CORS configured to allow requests from the frontend origin
 
 ## Setup Instructions
 
 1. **Clone the repository** (if you haven't already):
+
    ```bash
    git clone <repository-url>
    cd history_trivia_frontend
    ```
 
 2. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 3. **Create environment file**:
    Create a `.env` file in the root directory with the following variable:
+
    ```env
    VITE_API_BASE_URL=http://localhost:3000
    ```
+
    Replace `http://localhost:3000` with your actual backend API URL.
 
 4. **Start the development server**:
+
    ```bash
    npm run dev
    ```
@@ -110,6 +116,7 @@ src/
 ### Node.js Version Issues
 
 If you encounter `crypto.hash is not a function` error, ensure you're using Node.js v20.12.0 or higher. Check your version with:
+
 ```bash
 node --version
 ```
@@ -117,6 +124,7 @@ node --version
 ### Backend Connection Issues
 
 If the app can't connect to the backend:
+
 - Verify the backend server is running
 - Check that `VITE_API_BASE_URL` in your `.env` file is correct
 - Ensure CORS is properly configured on the backend

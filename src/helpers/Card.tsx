@@ -1,22 +1,38 @@
 import { useSortable } from '@dnd-kit/sortable';
-import type { LandmarkDataStructure } from '../models/types';
+import type { LandmarkDataStructure } from '../api/generated/models';
 
 type CardProps = {
   landmark: LandmarkDataStructure;
   isOverlay?: boolean;
   confirmPlacement?: (id: number) => void;
+  flashState?: boolean; // true = correct (green), false = wrong (red), undefined = no flash
 };
 
-function Card({ landmark, isOverlay = false, confirmPlacement }: CardProps) {
+function Card({
+  landmark,
+  isOverlay = false,
+  confirmPlacement,
+  flashState
+}: CardProps) {
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if ((e.target as HTMLElement).closest('[data-no-dnd="true"]')) {
       e.stopPropagation(); // Prevent drag start
     }
   };
-  const { isDragging } = useSortable({ id: landmark.id });
+  const { isDragging } = useSortable({ id: landmark.id ?? 0 });
+
+  // Determine flash class
+  const flashClass =
+    flashState === true
+      ? 'flash-correct'
+      : flashState === false
+        ? 'flash-wrong'
+        : '';
 
   return (
-    <div className="card">
+    <div
+      className={`card ${landmark.isConfirmed ? 'card-static' : ''} ${flashClass}`}
+    >
       {!landmark.isConfirmed &&
         landmark.isMoved &&
         !isDragging &&
@@ -26,18 +42,18 @@ function Card({ landmark, isOverlay = false, confirmPlacement }: CardProps) {
             className="confirmButton"
             data-no-dnd="true"
             onPointerDown={handlePointerDown}
-            onClick={() => confirmPlacement(landmark.id)}
+            onClick={() => confirmPlacement(landmark.id ?? 0)}
           >
             Tap to Confirm Placement
           </button>
         )}
       {landmark.isConfirmed && (
         <div>
-          <p className="font-bold">{landmark.pointOfOccurence}</p>
-          <p className="line-clamp-1">{landmark.hintDescription}</p>
+          <p className="font-semibold">{landmark.pointOfOccurence ?? ''}</p>
+          <p className="line-clamp-1">{landmark.hintDescription ?? ''}</p>
         </div>
       )}
-      {!landmark.isConfirmed && <p>{landmark.fullDescription}</p>}
+      {!landmark.isConfirmed && <p>{landmark.fullDescription ?? ''}</p>}
     </div>
   );
 }

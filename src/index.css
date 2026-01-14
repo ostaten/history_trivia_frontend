@@ -6,29 +6,73 @@
 @source "../node_modules/flowbite";
 
 @theme {
-  --color-primary: oklch(76.9% 0.188 70.08); /* amber-500 */
-  --color-light: oklch(98.7% 0.022 95.277); /* amber-50 */
-  --color-off-light: oklch(96.2% 0.059 95.617); /* amber-100 */
-  --color-neutral: oklch(37.2% 0.044 257.287); /* slate-700 */
-  --color-off-dark: oklch(20.8% 0.042 265.755); /* slate-900 */
-  --color-dark: oklch(12.9% 0.042 264.695); /* slate-950 */
+  /* Primary Accent - Enhanced Amber/Orange */
+  --color-primary: oklch(75% 0.18 70); /* Main accent */
+  --color-primary-bright: oklch(85% 0.2 70); /* Hover states */
+  --color-primary-dim: oklch(65% 0.15 70); /* Subtle accents */
+
+  /* Secondary Accent - Cool Blue/Cyan */
+  --color-secondary: oklch(70% 0.15 220); /* Highlights */
+
+  /* Dark Backgrounds - Rich & Deep */
+  --color-dark: oklch(8% 0.02 270); /* Deepest background */
+  --color-off-dark: oklch(12% 0.03 270); /* Main background */
+  --color-surface: oklch(16% 0.04 270); /* Card/surface */
+  --color-surface-elevated: oklch(20% 0.05 270); /* Elevated surfaces */
+
+  /* Text Colors */
+  --color-text-primary: oklch(95% 0.01 270); /* Main text */
+  --color-text-secondary: oklch(70% 0.02 270); /* Muted text */
+  --color-text-muted: oklch(55% 0.02 270); /* Very muted */
+
+  /* Borders */
+  --color-border: oklch(25% 0.05 270); /* Standard borders */
+  --color-border-subtle: oklch(20% 0.03 270); /* Subtle borders */
+  --color-border-accent: oklch(70% 0.18 70); /* Accent borders */
+
+  /* Keep for backward compatibility */
+  --color-light: oklch(
+    98.7% 0.022 95.277
+  ); /* Keep for any light mode remnants */
+  --color-off-light: oklch(
+    96.2% 0.059 95.617
+  ); /* Keep for any light mode remnants */
+  --color-neutral: oklch(37.2% 0.044 257.287); /* Keep for compatibility */
 }
 
 @layer base {
   html {
-    @apply bg-light
-    text-primary;
+    @apply bg-off-dark
+    text-text-primary
+    text-base
+    leading-relaxed;
   }
   h1 {
-    @apply text-2xl 
+    @apply text-2xl
+    sm:text-3xl
     font-bold
-    m-4 text-center;
+    leading-tight
+    my-2
+    sm:my-4
+    text-center
+    text-primary;
   }
-  @media (prefers-color-scheme: dark) {
-    html {
-      @apply bg-dark
-      text-primary;
-    }
+  h2 {
+    @apply text-xl
+    sm:text-2xl
+    font-semibold
+    leading-snug
+    text-text-primary;
+  }
+  h3 {
+    @apply text-lg
+    sm:text-xl
+    font-semibold
+    leading-snug
+    text-text-primary;
+  }
+  p {
+    @apply leading-relaxed;
   }
 }
 
@@ -41,36 +85,402 @@
     justify-center 
     self-center 
     w-fit 
-    px-5 
-    py-1 
+    px-3
+    sm:px-5 
+    py-1.5
+    sm:py-2 
     cursor-pointer
-    bg-off-dark
-    dark:bg-light
-    hover:bg-dark
-    dark:hover:bg-off-light;
+    bg-neutral
+    text-text-primary
+    text-sm
+    sm:text-base
+    border-2
+    border-primary
+    hover:border-primary-bright
+    hover:bg-neutral
+    shadow-md
+    transition-all
+    duration-200;
   }
   .card {
     @apply grid
-    p-1
+    p-3
+    sm:p-4
     border-2
-    border-primary
+    border-border-accent
     cursor-grab
     rounded-lg
-    shadow-sm
-    bg-off-light
-    dark:bg-off-dark
-    m-2
+    shadow-lg
+    bg-surface
+    m-1
+    sm:m-2
     w-full
     text-center
-    place-items-center;
+    place-items-center
+    transition-all
+    duration-300
+    ease-in-out;
+    animation-fill-mode: forwards;
     p {
-      @apply line-clamp-3 col-1 z-20 row-1;
+      @apply line-clamp-3 col-1 z-20 row-1
+      text-text-primary
+      px-1
+      sm:px-2;
     }
+  }
+
+  /* Prevent fadeIn from re-running when flash is active - only run flash animation */
+  .card.flash-correct {
+    animation: flashGreen 0.6s ease-out;
+  }
+
+  .card.flash-wrong {
+    animation: flashRed 0.6s ease-out;
+  }
+
+  /* Only apply hover effects to draggable cards */
+  .card:not(.card-static):not(.card-empty):hover {
+    @apply scale-[1.02]
+    border-primary
+    shadow-[0_0_20px_rgba(251,146,60,0.3)];
+  }
+
+  /* Empty card styling - centered text, no hover effects, flush top */
+  .card-empty {
+    @apply place-items-center
+    pt-3
+    sm:pt-4
+    pb-0
+    px-3
+    sm:px-4
+    mt-0
+    mb-1
+    sm:mb-2
+    cursor-default
+    overflow-visible;
+    span {
+      @apply leading-normal
+      text-sm
+      sm:text-base;
+    }
+  }
+
+  /* Static/confirmed cards - no hover effects */
+  .card-static {
+    @apply cursor-default;
   }
   .sidebarItem {
     @apply mb-6;
   }
-  .arrowIcon {
-    @apply max-w-8;
+  /* Timeline marker container */
+  .timeline-marker {
+    @apply flex
+    w-full
+    justify-center
+    items-center
+    relative
+    px-1
+    sm:px-4
+    py-1
+    sm:py-3
+    rounded-lg
+    sm:bg-surface
+    sm:border
+    sm:border-border-subtle
+    sm:shadow-md
+    transition-all
+    duration-300
+    ease-in-out;
+    animation: fadeIn 0.5s ease-out;
   }
+
+  /* Timeline label text */
+  .timeline-label {
+    @apply text-primary
+    font-semibold
+    text-lg
+    sm:text-xl
+    mx-2
+    sm:mx-4
+    transition-all
+    duration-300
+    ease-out;
+    text-shadow: 0 0 10px rgba(251, 146, 60, 0.3);
+  }
+
+  /* Arrow icons with primary color filter and glow */
+  .arrowIcon {
+    @apply max-w-6
+    sm:max-w-8
+    transition-all
+    duration-300
+    ease-in-out;
+    /* Apply primary color filter using CSS filter */
+    filter: brightness(1.1) drop-shadow(0 0 4px rgba(251, 146, 60, 0.4));
+  }
+
+  .arrowIcon:hover {
+    @apply scale-110;
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(251, 146, 60, 0.6));
+  }
+
+  /* Connecting timeline line - positioned between markers */
+  .timeline-line-start {
+    @apply absolute
+    left-1/2
+    -translate-x-1/2
+    w-0.5
+    opacity-30
+    pointer-events-none
+    z-0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(251, 146, 60, 0.2),
+      rgba(251, 146, 60, 0.4),
+      rgba(251, 146, 60, 0.2)
+    );
+    box-shadow: 0 0 8px rgba(251, 146, 60, 0.2);
+  }
+
+  /* Loading state */
+  .loading {
+    @apply flex
+    items-center
+    justify-center
+    gap-2
+    text-text-secondary;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .loading-spinner {
+    @apply w-5
+    h-5
+    border-2
+    border-border-subtle
+    border-t-primary
+    rounded-full;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Score animation */
+  .score-value {
+    @apply transition-all
+    duration-300
+    ease-out;
+  }
+
+  .score-updated {
+    animation: scorePulse 0.6s ease-out;
+  }
+
+  /* Button press feedback */
+  .confirmButton:active {
+    @apply scale-95;
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scorePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    color: inherit;
+  }
+  50% {
+    transform: scale(1.1);
+    color: var(--color-primary);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flashGreen {
+  0%,
+  100% {
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+  50% {
+    background-color: rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 20px 5px rgba(34, 197, 94, 0.5);
+    border-color: rgba(34, 197, 94, 0.8);
+  }
+}
+
+@keyframes flashRed {
+  0%,
+  100% {
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+  50% {
+    background-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.5);
+    border-color: rgba(239, 68, 68, 0.8);
+  }
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-score-pulse {
+  animation: scorePulse 0.6s ease-out;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* React Calendar Dark Theme Styling */
+/* Override default react-calendar styles with higher specificity */
+.react-calendar {
+  @apply bg-surface border border-border rounded-lg shadow-lg p-4;
+  font-family: inherit !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.react-calendar__navigation {
+  @apply flex justify-between items-center mb-4;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1rem !important;
+}
+
+.react-calendar__navigation button {
+  @apply text-text-primary bg-transparent border-none cursor-pointer px-2 py-1 rounded transition-colors duration-200;
+  min-width: 44px !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  color: var(--color-text-primary) !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.react-calendar__navigation__label {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}
+
+.react-calendar__navigation button:hover {
+  @apply bg-surface-elevated;
+  background-color: var(--color-surface-elevated) !important;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  @apply bg-surface-elevated;
+  background-color: var(--color-surface-elevated) !important;
+}
+
+.react-calendar__navigation button[disabled] {
+  @apply text-text-muted cursor-not-allowed opacity-50;
+  color: var(--color-text-muted) !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.react-calendar__month-view__weekdays {
+  @apply text-text-secondary font-semibold mb-2;
+  color: var(--color-text-secondary) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  @apply p-2 text-center;
+  padding: 0.5rem !important;
+  text-align: center !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+}
+
+.react-calendar__tile {
+  @apply bg-transparent border-none text-text-primary cursor-pointer p-2 relative transition-all duration-200;
+  aspect-ratio: 1 !important;
+  max-width: 100% !important;
+  position: relative !important;
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--color-text-primary) !important;
+  padding: 0.5rem !important;
+  font-size: 1rem !important;
+}
+
+.react-calendar__tile abbr {
+  display: block;
+}
+
+.react-calendar__tile:enabled:hover {
+  @apply bg-surface-elevated;
+  background-color: var(--color-surface-elevated) !important;
+}
+
+.react-calendar__tile:enabled:focus {
+  @apply bg-surface-elevated outline-none ring-2 ring-primary ring-offset-2 ring-offset-off-dark;
+  background-color: var(--color-surface-elevated) !important;
+  outline: none !important;
+}
+
+.react-calendar__tile--now {
+  @apply bg-primary/10 border-2 border-primary;
+  background-color: rgba(251, 146, 60, 0.1) !important;
+  border: 2px solid var(--color-primary) !important;
+}
+
+.react-calendar__tile--now:enabled:hover {
+  @apply bg-primary/20;
+  background-color: rgba(251, 146, 60, 0.2) !important;
+}
+
+.react-calendar__tile--active {
+  @apply bg-primary text-off-dark;
+  background-color: var(--color-primary) !important;
+  color: var(--color-off-dark) !important;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  @apply bg-primary-bright;
+  background-color: var(--color-primary-bright) !important;
+}
+
+.react-calendar__tile--neighboringMonth {
+  color: var(--color-text-muted) !important;
+  opacity: 0.5 !important;
+}
+
+/* Hide date number for completed chronokwizes */
+.react-calendar__tile.chronokwiz-completed abbr {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
 }

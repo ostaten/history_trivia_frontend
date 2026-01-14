@@ -6,7 +6,9 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <SidebarMenu />
-      <Outlet />
+      <div className="ml-12 min-h-screen">
+        <Outlet />
+      </div>
       <TanStackRouterDevtools />
     </>
   )

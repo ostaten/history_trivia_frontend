@@ -1,4 +1,4 @@
-import type { LandmarkDataStructure } from '../models/types';
+import type { LandmarkDataStructure } from './generated/models';
 
 export type KwizEventsPayload = {
   userId: string;

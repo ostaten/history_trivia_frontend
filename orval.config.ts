@@ -1,0 +1,24 @@
+import { defineConfig } from 'orval';
+
+export default defineConfig({
+  api: {
+    input: {
+      // Your OpenAPI spec endpoint
+      target: 'http://localhost:3173/api/openapi.json'
+    },
+    output: {
+      mode: 'tags-split',
+      target: './src/api/generated',
+      schemas: './src/api/generated/models',
+      client: 'axios',
+      httpClient: 'axios',
+      withCredentials: true, // This will add withCredentials: true to all requests
+      override: {
+        mutator: {
+          path: './src/api/axios-instance.ts',
+          name: 'customInstance'
+        }
+      }
+    }
+  }
+});

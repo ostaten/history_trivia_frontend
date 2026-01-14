@@ -1,5 +1,5 @@
 import type { KwizEventsPayload } from '../api/types';
-import type { LandmarkDataStructure } from '../models/types';
+import type { LandmarkDataStructure } from '../api/generated/models';
 
 /**
  * Shuffle an array (Fisher–Yates algorithm)
@@ -22,7 +22,7 @@ export function processKwizPayload(payload: KwizEventsPayload): {
 } {
   console.log(payload);
   const ordered = [...payload.events].sort((a, b) =>
-    a.pointOfOccurence.localeCompare(b.pointOfOccurence)
+    (a.pointOfOccurence ?? '').localeCompare(b.pointOfOccurence ?? '')
   );
 
   const randomized = shuffle(payload.events);
