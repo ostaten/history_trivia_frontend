@@ -182,7 +182,6 @@ export default function TwoContainerSystem({
             >
               <EmptyCard
                 numberLeft={allLandmarks.unplacedLandmarkContainer.length}
-                isDragging={activeCard != undefined}
               />
             </div>
           )}

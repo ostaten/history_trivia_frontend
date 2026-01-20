@@ -1,9 +1,8 @@
 type EmptyCardProps = {
   numberLeft: number;
-  isDragging: boolean;
 };
 
-function EmptyCard({ numberLeft, isDragging }: EmptyCardProps) {
+function EmptyCard({ numberLeft }: EmptyCardProps) {
   return (
     <div className="card card-empty w-full">
       <span className="font-semibold block">+ {numberLeft} Remaining</span>
