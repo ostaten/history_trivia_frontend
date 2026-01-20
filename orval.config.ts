@@ -12,7 +12,6 @@ export default defineConfig({
       schemas: './src/api/generated/models',
       client: 'axios',
       httpClient: 'axios',
-      withCredentials: true, // This will add withCredentials: true to all requests
       override: {
         mutator: {
           path: './src/api/axios-instance.ts',

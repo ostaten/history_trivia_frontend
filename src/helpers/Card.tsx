@@ -6,13 +6,15 @@ type CardProps = {
   isOverlay?: boolean;
   confirmPlacement?: (id: number) => void;
   flashState?: boolean; // true = correct (green), false = wrong (red), undefined = no flash
+  hideDate?: boolean;
 };
 
 function Card({
   landmark,
   isOverlay = false,
   confirmPlacement,
-  flashState
+  flashState,
+  hideDate = false
 }: CardProps) {
   const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if ((e.target as HTMLElement).closest('[data-no-dnd="true"]')) {
@@ -49,7 +51,9 @@ function Card({
         )}
       {landmark.isConfirmed && (
         <div>
-          <p className="font-semibold">{landmark.pointOfOccurence ?? ''}</p>
+          {!hideDate && (
+            <p className="font-semibold">{landmark.pointOfOccurence ?? ''}</p>
+          )}
           <p className="line-clamp-1">{landmark.hintDescription ?? ''}</p>
         </div>
       )}

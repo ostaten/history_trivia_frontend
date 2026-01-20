@@ -47,6 +47,32 @@ export const getChronokwizByDate = (
   return chronokwizApi.getChronokwizDate(date);
 };
 
+/**
+ * Normalize a user prompt
+ */
+export const normalizePrompt = (
+  prompt: string
+): Promise<{
+  normalizedPrompt?: string;
+  originalPrompt?: string;
+}> => {
+  return chronokwizApi.postChronokwizNormalizePrompt({ prompt });
+};
+
+/**
+ * Generate a custom chronokwiz from a user prompt
+ */
+export const createCustomChronokwiz = (
+  prompt: string,
+  attemptNumber?: number
+): Promise<{
+  events?: Array<any>;
+  prompt?: string;
+  attemptNumber?: number;
+}> => {
+  return chronokwizApi.postChronokwizCustom({ prompt, attemptNumber });
+};
+
 // Re-export types for convenience
 export type {
   ChronokwizDataStructure,

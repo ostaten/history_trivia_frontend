@@ -86,6 +86,49 @@ Create a `.env` file in the project root with this variable. Note that Vite requ
 - `npm run preview` - Preview the production build locally
 - `npm run lint` - Run ESLint to check code quality
 - `npm run format` - Format code using Prettier
+- `npm test` - Run unit tests in watch mode
+- `npm test -- --run` - Run unit tests once
+- `npm test:ui` - Run tests with Vitest UI
+
+## Testing
+
+This project uses [Vitest](https://vitest.dev/) for unit testing with [React Testing Library](https://testing-library.com/react) for component testing.
+
+### Running Tests
+
+- **Watch mode** (default): `npm test` - Runs tests in watch mode, re-running on file changes
+- **Single run**: `npm test -- --run` - Runs all tests once and exits
+- **UI mode**: `npm test:ui` - Opens Vitest UI for interactive test running and debugging
+
+### Test Coverage
+
+The test suite currently covers:
+
+1. **Utility Functions** (`src/utility/utility.test.ts`)
+   - `processKwizPayload`: Tests event sorting and randomization
+   - `getAttemptCounter`: Tests localStorage-based attempt counter retrieval
+   - `incrementAttemptCounter`: Tests counter incrementing and persistence
+
+2. **Card Component** (`src/helpers/Card.test.tsx`)
+   - Renders unconfirmed cards with full descriptions
+   - Renders confirmed cards with date and hint
+   - Hides date when `hideDate` prop is true
+   - Shows confirm button when event is moved but not confirmed
+
+3. **GuideModal Component** (`src/helpers/GuideModal.test.tsx`)
+   - Modal visibility based on `show` prop
+   - Close button functionality
+   - Displays game instructions (Objective, How to Play, Tips)
+
+### Test Structure
+
+Tests are located alongside their source files with the `.test.ts` or `.test.tsx` extension:
+
+- `src/utility/utility.test.ts`
+- `src/helpers/Card.test.tsx`
+- `src/helpers/GuideModal.test.tsx`
+
+The test setup file is located at `src/test/setup.ts` and configures the testing environment with `@testing-library/jest-dom` matchers.
 
 ## Tech Stack
 

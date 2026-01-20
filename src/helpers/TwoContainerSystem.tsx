@@ -34,6 +34,7 @@ type TwoContainerSystemProps = {
   score: number;
   setScore: React.Dispatch<React.SetStateAction<number>>;
   onComplete?: (finalScore: number) => void;
+  isCustomQuiz?: boolean;
 };
 
 type AllLandmarks = {
@@ -46,7 +47,8 @@ export default function TwoContainerSystem({
   placedLandmarks,
   score,
   setScore,
-  onComplete
+  onComplete,
+  isCustomQuiz = false
 }: TwoContainerSystemProps) {
   //core structure
   const [allLandmarks, setAllLandmarks] = useState<AllLandmarks>({
@@ -72,14 +74,6 @@ export default function TwoContainerSystem({
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-
-  // function findItem(id: number) {
-  //   for (const map of Object.values(allLandmarks)) {
-  //     const item = map.find((v) => v.id == id);
-  //     if (item) return item;
-  //   }
-  //   return undefined;
-  // }
 
   function confirmPlacement(id: number) {
     const itemIndex = allLandmarks.placedLandmarkContainer.findIndex(
@@ -224,6 +218,7 @@ export default function TwoContainerSystem({
                         ? flashState.isCorrect
                         : undefined
                     }
+                    hideDate={isCustomQuiz}
                   />
                 </SortableItem>
               ))}
@@ -274,18 +269,14 @@ export default function TwoContainerSystem({
     const { id } = active;
 
     if (!over) {
-      console.log('could not find over');
       return;
     }
 
     const { id: overID } = over;
 
     // Avoid repeating drag-over on same item
-    console.log(id, overID);
-
     const activeContainer = findContainer(id);
     const overContainer = findContainer(overID);
-    console.log(activeContainer, overContainer);
 
     if (
       !activeContainer ||
@@ -351,13 +342,11 @@ export default function TwoContainerSystem({
     const { active, over } = event;
     const { id } = active;
 
-    console.log(over);
     if (
       !over ||
       (over.data.current?.sortable.containerId != 'placedLandmarkContainer' &&
         over.id != 'placedLandmarkContainer')
     ) {
-      console.log('could not find over');
       setActiveCard(undefined);
       setEverythingConfirmed(true);
       return;
@@ -373,7 +362,6 @@ export default function TwoContainerSystem({
       !overContainer ||
       activeContainer !== overContainer
     ) {
-      console.log('could not find one or more containers');
       setActiveCard(undefined);
       setEverythingConfirmed(false);
       return;
@@ -394,14 +382,11 @@ export default function TwoContainerSystem({
     );
 
     //we are setting event
-    console.log(activeIndex, overIndex);
-    console.log(allLandmarks);
     //we are dragging unconfirmed event from inside placed events
     if (
       allLandmarks.onDeckLandmarkContainer.length == 1 &&
       allLandmarks.placedLandmarkContainer.find((c) => (c.id ?? 0) == id)
     ) {
-      console.log('dragging unconfirmed event');
       setAllLandmarks((items) => ({
         ...items,
         [overContainer]: arrayMove(
@@ -416,12 +401,9 @@ export default function TwoContainerSystem({
       setActiveCard(undefined);
     } else if (allLandmarks.onDeckLandmarkContainer.length == 0) {
       //intial move from unplaced to placed
-      console.log('popping!', activeIndex, overIndex);
       const tempArray = [...allLandmarks.unplacedLandmarkContainer];
       const newLandmarkOnDeck = tempArray.pop();
-      console.log(newLandmarkOnDeck);
       if (newLandmarkOnDeck) {
-        console.log(activeIndex, overIndex);
         setAllLandmarks((items) => ({
           ...items,
           [overContainer]: arrayMove(
@@ -438,7 +420,6 @@ export default function TwoContainerSystem({
         setActiveCard(undefined);
         //continue on in game
       } else {
-        console.log('hit end of game');
         //go to end of game
         setAllLandmarks((items) => {
           const updated = {

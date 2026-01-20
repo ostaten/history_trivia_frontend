@@ -1,0 +1,123 @@
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch
+} from '@tanstack/react-router';
+import { useState } from 'react';
+
+export const Route = createFileRoute('/kustom-kwiz-kreation')({
+  component: KustomKwiz,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      error: (search.error as string) || undefined
+    };
+  }
+});
+
+function KustomKwiz() {
+  const navigate = useNavigate();
+  const search = useSearch({ from: '/kustom-kwiz-kreation' });
+  const error = search?.error;
+  const [topic, setTopic] = useState('');
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (topic.trim()) {
+      // Encode the topic for URL
+      const encodedTopic = encodeURIComponent(topic.trim());
+      navigate({
+        to: '/kustom-kwiz/$topic',
+        params: { topic: encodedTopic },
+        search: { error: undefined }
+      });
+    }
+  };
+
+  return (
+    <>
+      <div className="flex justify-between items-center px-4 sm:px-6 md:px-8 lg:px-10">
+        <div className="grow basis-0"></div>
+        <h1 className="justify-center">Kustom Kwiz</h1>
+        <div className="grow basis-0"></div>
+      </div>
+      <div className="flex justify-center px-2 sm:px-4">
+        <div className="w-full max-w-2xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="topic"
+                className="block text-text-primary font-semibold mb-2 text-left"
+              >
+                Kustom Kwiz Topic
+              </label>
+              <input
+                id="topic"
+                type="text"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder='"Lord of the Rings", "Full Metal Alchemist", "War and Peace"'
+                className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                autoFocus
+              />
+            </div>
+
+            {error && (
+              <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400">
+                <p className="font-semibold mb-1">Error generating quiz:</p>
+                <p>{error}</p>
+              </div>
+            )}
+
+            <div className="space-y-2 -mt-3 text-left">
+              <button
+                type="button"
+                onClick={() => setShowInstructions(!showInstructions)}
+                className="text-text-secondary hover:text-text-primary text-sm underline transition-colors cursor-pointer"
+              >
+                Need help?
+              </button>
+
+              {showInstructions && (
+                <div className="p-4 bg-surface-elevated border border-border rounded-lg text-text-secondary space-y-2 animate-fade-in">
+                  <p>
+                    Enter any topic from any genre - books, movies, TV shows,
+                    anime, video games, historical events, or any narrative with
+                    a timeline.
+                  </p>
+                  <p>
+                    Note: This feature is volatile and may contain mistakes,
+                    especially if the prompt deviates from a single commonly
+                    accessible source material.
+                  </p>
+                  <p className="font-semibold text-text-primary mt-3">
+                    Examples:
+                  </p>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>"Lord of the Rings"</li>
+                    <li>"Full Metal Alchemist"</li>
+                    <li>"War and Peace"</li>
+                    <li>"Hunter x Hunter anime"</li>
+                    <li>"Game of Thrones"</li>
+                  </ul>
+                  <p className="mt-3">
+                    A chronokwiz will be generated with events from that topic,
+                    and you'll need to place them in chronological order!
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={!topic.trim()}
+              className="w-full px-6 py-3 bg-primary text-off-dark font-semibold rounded-lg hover:bg-primary-bright disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+            >
+              Generate Kwiz
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
